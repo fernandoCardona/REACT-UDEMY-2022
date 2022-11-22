@@ -1,6 +1,6 @@
 //Fetch Api
 const apiKey ='MhqUYRbsmpzNQdLDG55qddao5X8IWLrt'
-const apiUrl = `https://api.giphy.com/v1/gifs/random?api_key=${ apiKey }`
+const apiUrl = `https://api.giphy.com/v1/gifs/random?api_key=${ apiKey }`;
 
 const peticion = fetch(apiUrl);
 
