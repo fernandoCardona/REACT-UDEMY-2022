@@ -1,0 +1,30 @@
+body, html {
+    background-color: #21232A;
+    color: #fff;
+    font-family: "Helvetica Neue",Helvetica;
+    font-size: 1.2rem;
+    padding: 70px;
+}
+.button {
+    background-color: blue;
+    border: white;
+    border-radius: 3px;
+    color: white;
+    padding: 5px 20px;
+    transition: background-color .3 ease-in-out;
+    transition: color .3 ease-in-out;
+}
+.button:hover {
+    background-color: lightblue;
+    color: black;
+}
+.button.red {
+    background-color: lightgreen;
+    color: black ;
+    margin-left: 10px;
+}
+.button.reset {
+    background-color: lightcoral;
+    color: white ;
+    margin-left: 10px;
+}
