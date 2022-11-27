@@ -88,6 +88,9 @@ div.counter{
   align-items:center;
   gap: 1em;
 }
+a {
+  margin-right: 10px;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
