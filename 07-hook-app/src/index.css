@@ -81,6 +81,13 @@ div.counter{
   gap: 0.5em;
   margin: 0 auto;
 }
+.flex {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: flex-start;
+  align-items:center;
+  gap: 1em;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
