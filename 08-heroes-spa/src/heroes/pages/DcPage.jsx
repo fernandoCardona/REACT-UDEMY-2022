@@ -1,4 +1,6 @@
-import { HeroeList } from "../components/HeroeList"
+import React from 'react';
+import { HeroeList } from '../components/HeroeList';
+
 
 
  
