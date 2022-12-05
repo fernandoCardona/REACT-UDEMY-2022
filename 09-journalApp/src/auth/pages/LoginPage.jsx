@@ -1,27 +1,35 @@
 //Importaciones de Core
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {Link as RouterLink } from 'react-router-dom';
+import { useMemo } from 'react';
 //Importaciones de Materia UI
 import { Google } from '@mui/icons-material';
 import { Button, Grid, Link, TextField, Typography } from '@mui/material';
 //Importaciones propias de la app
 import { AuthLayout } from '../layout/AuthLayout';
 import { checkingAuthentication, startGoogleSingIn } from '../../store/auth';
-//Ikportaciones de Hooks Propios
+//Importaciones de Hooks Propios
 import { useForm } from '../../hooks';
+
 
 
  
 
 
 export const LoginPage = () => {
+    //10.2-usamos usSelector para crear una condicional que deshabilite los botones de login y googleLogin cuando el status es authentificate
+    const { status } = useSelector( state => state.auth );
+
     //8.6-Importamos useDispatch para poder disparar nuestras funciones del authSlices 
     const dispatch = useDispatch();
     //8.1-Impoortamos el customHook 'useForm' para recoger los datos del formulario Login
-    const { email, password, handleInputchange, formState } = useForm({
+    const { email, password, handleInputChange, formState } = useForm({
         email: 'correo@correo.com',
         password: '123456'
     });
+    //10.3-usamos useMemo para memorizar el resultado para la condiciona isAuthenticating
+    const isAuthenticating = useMemo( () => status === 'checking', [status]);
+
 
     //8.2-Creamos la funcion handleSubmit para recoger los datos de los Input.
     const handleSubmit = (e) => {
@@ -53,7 +61,7 @@ export const LoginPage = () => {
                                 fullWidth
                                 name="email"
                                 value={email}
-                                onChange={ handleInputchange }
+                                onChange={ handleInputChange }
                             />
                         </Grid>
                         <Grid item xs={ 12 } sx={{ mt: 2 }}>
@@ -64,17 +72,23 @@ export const LoginPage = () => {
                                 fullWidth
                                 name="password"
                                 value={ password }
-                                onChange={ handleInputchange }
+                                onChange={ handleInputChange }
                             />
                         </Grid> 
                         <Grid container spacing={ 2 } sx={{ mb: 2, mt: 1 }}>
                             <Grid item xs={ 12 } sm={ 6 }>
-                                <Button type="submit" variant='contained' fullWidth>
+                                <Button 
+                                    disabled={ isAuthenticating }
+                                    type="submit" 
+                                    variant='contained' 
+                                    fullWidth
+                                >
                                     Login
                                 </Button>
                             </Grid>
                             <Grid item xs={ 12 } sm={ 6 }>
                                 <Button 
+                                    disabled={ isAuthenticating }
                                     variant='contained' 
                                     fullWidth
                                     onClick={ handleGoogleSingIn }

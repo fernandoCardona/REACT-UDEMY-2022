@@ -1,7 +1,7 @@
 //9.3-Creamos el archivo provides para contener aqui todos los porveedores de auth de la app 
 
 //9.4-Importamos de firebase/auth --> GoogleAuthProvider
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { firebaseAuth } from './config';
 
 const googleProvider = new GoogleAuthProvider();
@@ -24,6 +24,40 @@ export const singInWithGoogle = async() => {
         
         return{
             ok: false,
+            errorMessage,
         }
     }
 }
+//12.1-creamos un nuevo provaider para madar la info de nuestro register a firebase y registrar el nuevo usuario
+export const registerUserWithEmailPassword = async( { displayName, email, password } ) => {
+    try {
+        const resp = await createUserWithEmailAndPassword( firebaseAuth, email, password );
+        const { uid, photoURL } = resp.user;
+        console.log(resp);
+//TODO:Actualizar displayName en Firebase
+
+        return{
+            ok: true,
+            uid, photoURL, displayName, email
+        }
+
+    } catch (error) {
+        console.log(error);
+        return { ok: false, errorMessage: error.message }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
