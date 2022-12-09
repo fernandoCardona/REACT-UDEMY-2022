@@ -8,7 +8,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const authSlice = createSlice({
       name: 'auth',
       initialState: {
-            status: 'not-authhenticated', // 'checking','not-authhenticated', 'authenticated'
+            status: 'checking', // 'checking','not-authhenticated', 'authenticated'
             uid: null,
             email: null,
             displayName: null,
@@ -18,7 +18,7 @@ export const authSlice = createSlice({
 
       reducers: {
          login: ( state, { payload } ) => {
-            state.status = 'authhenticated'; 
+            state.status = 'authenticated'; 
             state.email = payload.email;
             state.uid = payload.uid;
             state.displayName = payload.displayName;
@@ -26,12 +26,12 @@ export const authSlice = createSlice({
             state.errorMessage = null;
          },
          logout: ( state, { payload } ) => {
-            state.status = 'not-authhenticated'; 
+            state.status = 'not-authenticated'; 
             state.uid = null;
             state.email = null;
             state.displayName = null;
             state.photoURL = null;
-            state.errorMessage = payload.errorMessage;
+            state.errorMessage = payload?.errorMessage;
          },
          checkingCredentials: ( state ) => {
             //8.5- con esta funcion definimos el estado inicial a checking en el State.

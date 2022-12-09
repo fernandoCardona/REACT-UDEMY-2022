@@ -4,29 +4,29 @@ import {Link as RouterLink } from 'react-router-dom';
 import { useMemo } from 'react';
 //Importaciones de Materia UI
 import { Google } from '@mui/icons-material';
-import { Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material';
 //Importaciones propias de la app
 import { AuthLayout } from '../layout/AuthLayout';
-import { checkingAuthentication, startGoogleSingIn } from '../../store/auth';
+import { startGoogleSingIn, startLoginWithEmailPassword } from '../../store/auth';
 //Importaciones de Hooks Propios
 import { useForm } from '../../hooks';
 
 
 
- 
+const formData = {
+    email: '',
+    password: ''
+}
 
 
 export const LoginPage = () => {
     //10.2-usamos usSelector para crear una condicional que deshabilite los botones de login y googleLogin cuando el status es authentificate
-    const { status } = useSelector( state => state.auth );
+    const { status, errorMessage } = useSelector( state => state.auth );
 
     //8.6-Importamos useDispatch para poder disparar nuestras funciones del authSlices 
     const dispatch = useDispatch();
     //8.1-Impoortamos el customHook 'useForm' para recoger los datos del formulario Login
-    const { email, password, handleInputChange, formState } = useForm({
-        email: 'correo@correo.com',
-        password: '123456'
-    });
+    const { email, password, handleInputChange, formState } = useForm( formData );
     //10.3-usamos useMemo para memorizar el resultado para la condiciona isAuthenticating
     const isAuthenticating = useMemo( () => status === 'checking', [status]);
 
@@ -34,15 +34,15 @@ export const LoginPage = () => {
     //8.2-Creamos la funcion handleSubmit para recoger los datos de los Input.
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log( formState )
+        //console.log( formState )
         //8.7-Hacemos el dispatch de la accion que llamamos desl authSlice
-        dispatch( checkingAuthentication() );
+        dispatch( startLoginWithEmailPassword( { email, password } ) );
     }
 
     //8.3-Creamos la funcion handleGoogleSingIn para login con Google.
     const handleGoogleSingIn = () => {
          
-        console.log( 'Click handleGoogleSingIn!!!')
+        //console.log( 'Click handleGoogleSingIn!!!')
         dispatch( startGoogleSingIn() );
     }
 
@@ -51,7 +51,10 @@ export const LoginPage = () => {
     return (
         <>
             <AuthLayout title="Login">
-                <form onSubmit={ handleSubmit }>
+                <form 
+                    onSubmit={ handleSubmit } 
+                    className="animate__animated animate__fadeIn animate__faster"
+                >
                     <Grid container>  
                         <Grid item xs={ 12 } sx={{ mt: 2 }}>
                             <TextField 
@@ -75,6 +78,16 @@ export const LoginPage = () => {
                                 onChange={ handleInputChange }
                             />
                         </Grid> 
+                        <Grid container 
+                            display={ !!errorMessage ? '' : 'none' } 
+                            sx={{ mt: 2 }}
+                        >
+                            <Grid item xs={ 12 }>
+                                <Alert severity="error">{ errorMessage }</Alert>
+                            </Grid>
+                        </Grid>
+                        
+
                         <Grid container spacing={ 2 } sx={{ mb: 2, mt: 1 }}>
                             <Grid item xs={ 12 } sm={ 6 }>
                                 <Button 

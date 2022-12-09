@@ -1,8 +1,19 @@
-import { TurnedInNot } from "@mui/icons-material";
+//Importaciones de Redux
+import { useSelector } from "react-redux";
+
+//Importaciones de Materia ui
 import { Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+
+//Importaciones de la app 
+import { SideBarItem } from "./";
 
 
 export const SideBar = ( { drawerWidth = 240 } ) => {
+
+    //17.1 Cambiamos el nombre segun el usuario utilizando useSelector.
+    const { displayName } = useSelector( state => state.auth );
+    const { notes } = useSelector( state => state.journal );
+
   return (
     <Box component='nav'
         sx={{ 
@@ -18,25 +29,14 @@ export const SideBar = ( { drawerWidth = 240 } ) => {
             }}
         >
             <Toolbar>
-                <Typography variant='h6' noWrap>Fernando Cardona</Typography>
+                <Typography variant='h6' noWrap>{ displayName }</Typography>
 
             </Toolbar>
             <Divider/>
             <List>
                 { 
-                    [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre','Noviembre', 'Diciembre' ].map( text => (
-                        <ListItem key={ text } disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <TurnedInNot/>
-                                    
-                                </ListItemIcon>
-                                <Grid container>
-                                    <ListItemText primary={ text } />
-                                    <ListItemText secondary={'Lorem ipsum dolor sit.'}/>
-                                </Grid>
-                            </ListItemButton>
-                        </ListItem>
+                    notes.map( note => (
+                        <SideBarItem key={ note.id } { ...note }/>
                     ))
                 }
             </List>
