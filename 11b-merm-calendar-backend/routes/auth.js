@@ -7,6 +7,8 @@ const { crearUsuario, loginUsuario, revalidarToken } = require('../controllers/a
 const { check } = require('express-validator');
 //Importamos middleware 'validarCampos'
 const { validarCampos } = require('../middlewares/validar-campos');
+//Importamos middleware 'validarJWT'
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 //1.7-RUTAS de USUARIO AUTH ( 'host+/api/auth/' ):
 
@@ -37,7 +39,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
     );
 
     //Ruta revalidarToken
-    router.get('/renew', revalidarToken );
+    router.get('/renew',validarJWT , revalidarToken );
 
 
 module.exports = router;

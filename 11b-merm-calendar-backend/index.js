@@ -7,11 +7,17 @@ const dotenv = require('dotenv').config();
 //IMPORTAMOS BASE DE DATOS:
 const { dbConnection } = require('./database/config');
 
+//25.0-IMPORTAMOS paquete de CORS ( npm i cors ):
+const cors = require('cors');
+
 //1.2-CREAR SERVIDOR EXPRESS:
 const app = express();
 
 //20.1-Base de datos: desestructuramos
 dbConnection();
+
+//25.1-Habiltamos el filtro de CORS:
+app.use( cors() );
 
 //1.4.2-DIRECTORIO PUBLICO:
 app.use( express.static('public') );
@@ -22,7 +28,9 @@ app.use( express.json() );
 //1.4.1-ENDPOINS DE LAS RUTAS:
 //auth/crear, login,renew 
 app.use('/api/auth/', require('./routes/auth') );
-//CRUD: Eventos
+
+//30.1-CRUD: Eventos
+app.use('/api/events/', require('./routes/events') );
 
 //1.3-ESCUCHA DE PETICIONES:
 app.listen( process.env.PORT, () => {

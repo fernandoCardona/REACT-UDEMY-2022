@@ -7,6 +7,9 @@ const bcrypt = require('bcryptjs');
 //20.1-IMPORTACION Schema Usuario: (../models/Usuario)
 const Usuario = require('../models/Usuario');
 
+//24.1 IMPORTAMOS EL HELPER DE JWT: (../helpers/jwt)
+const { generarJWT } = require('../helpers/jwt');
+
 //1.8-Controllers AUTH: Son las funciones que controlan las rutas del authaccordion-accordion
 
 //Controller de crearUsuario:
@@ -34,11 +37,14 @@ const crearUsuario = async(req, res = response ) =>{
         //20.1-lo gravamos en la Db con la funcion: .save()
         await usuario.save();
 
+        //24.1- Despues de importar el helper 'generarJWT' lo utilizamos para generar JWT. 
+        const token = await generarJWT( usuario.id, usuario.name);
+
         res.status(201).json({
             ok: true,
             uid: usuario.id,
-            name: usuario.name
-            
+            name: usuario.name,
+            token
         });
 
     } catch (error) {
@@ -73,11 +79,14 @@ const loginUsuario = async(req, res = response) =>{
                 msg: 'Password incorrecto'
             });
         }
-        //22.3- Generamos el JSOn web Token 
+        //24.1- Despues de importar el helper 'generarJWT' lo utilizamos para generar JWT. 
+        const token = await generarJWT( usuario.id, usuario.name);
+
         res.json({
             ok: true,
             uid: usuario.id,
-            name: usuario.name
+            name: usuario.name,
+            token
         })
 
         
@@ -93,10 +102,17 @@ const loginUsuario = async(req, res = response) =>{
 }
 
 //Controller de revalidarToken:
-const revalidarToken = (req, res = response) =>{
+const revalidarToken = async(req, res = response) =>{
+
+   const uid = req.uid;
+   const name = req.name;
+
+    //24.2- Despues de importar el helper 'generarJWT' lo utilizamos para generar un nuevo JWT. 
+    const token = await generarJWT( uid, name);
+
     res.json({
         ok: true,
-        msg: 'renew'
+        token
     });
 }
 
