@@ -1,5 +1,5 @@
 //Importaciones de React:
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 //Importaciones de Terceros:
 import { Calendar} from 'react-big-calendar';
@@ -10,7 +10,7 @@ import { addHours } from 'date-fns';
 //Importaciones de la App:
 import { Navbar, CalendarEvent, CalendarModal, FabAddNew, FabDelete } from "../";
 import { localizer, getMessagesES } from '../../helpers';
-import { useUiStore, useCalendarStore } from '../../hooks';
+import { useUiStore, useCalendarStore, useAuthStore } from '../../hooks';
 
 
 //Evento del calendar:
@@ -28,18 +28,23 @@ import { useUiStore, useCalendarStore } from '../../hooks';
 
 
 export const CalendarPage = () => {
+    //29.1- Color al evento por usuario, del 'useAuthStore' obtenemos el usuario:
+    const { user } = useAuthStore();
+
     //importamos la funcion openDateModal del hook useUiStores
     const { openDateModal } = useUiStore();
     //importamos la funcion openDateModal del hook useCalendarStores
-    const { events, setActiveEvent } = useCalendarStore();
+    const { events, setActiveEvent, startLoadingEvents } = useCalendarStore();
 
 
     const [lastView, setLastView] = useState(localStorage.getItem( 'lastView' ) || 'week' );
 
     const eventPropGetter = ( event, start, end, isSelected ) => {
+        //29.2- Creamos una cosntante isMyEvent para identificar al usuario creador del evento, que nos devuelve una variable boolean true/false:
+        const isMyEvent = ( user.uid === event.user._id) || (user.uid === event.user.uid );
 
         const style = {
-            backgroundColor: '#347CF7',
+            backgroundColor: isMyEvent ? '#347CF7' : '#465660',
             borderRadius: '0px',
             opacity: 0.8,
             color: 'white'
@@ -66,6 +71,10 @@ export const CalendarPage = () => {
         localStorage.setItem( 'lastView', event );
         setLastView( event);
     }
+
+    useEffect( () => {
+        startLoadingEvents();
+    }, []);
 
     return (
         <>
