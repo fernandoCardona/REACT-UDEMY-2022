@@ -32,6 +32,11 @@ app.use('/api/auth/', require('./routes/auth') );
 //30.1-CRUD: Eventos
 app.use('/api/events/', require('./routes/events') );
 
+//EXCEPCION DE RUTAS: 
+app.get('*', (req, res) => {
+   res.sendFile(__dirname + '/public/index.html')
+})
+
 //1.3-ESCUCHA DE PETICIONES:
 app.listen( process.env.PORT, () => {
    console.log(`Servidor en el puerto: http://localhost:${process.env.PORT}/`);
